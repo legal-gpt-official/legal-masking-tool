@@ -1,0 +1,4 @@
+=== spaCy model resolution ===
+SPACY_MODEL_PATH=''
+  FAIL: name:ja_ginza_electra -> ja_ginza_electra ([E050] Can't find model 'ja_ginza_electra'. It doesn't seem to be a Python package or a valid path to a data directory.)
+  OK: name:ja_ginza -> ja_ginza

@@ -1,0 +1,89 @@
+version: 1
+
+global:
+  allowlist:
+    terms:
+      - "甲"
+      - "乙"
+      - "丙"
+      - "丁"
+
+output:
+  mode: "LABEL"
+  black_min_len: 3
+  label_format:
+    PERSON: "[PERSON_{n:02d}]"
+    COMPANY: "[COMPANY_{n:02d}]"
+    ADDRESS: "[ADDRESS]"
+    EMAIL: "[EMAIL]"
+    PHONE: "[PHONE]"
+    MONEY: "[MONEY]"
+    DATE: "[DATE]"
+    ID: "[ID]"
+    PARTIES: ""
+
+review:
+  threshold: 0.80
+
+address:
+  granularity: "UNTIL_CITY"
+
+pdf:
+  japanese_ratio_threshold: 0.20
+  max_rects_per_term: 50
+  min_term_length: 2
+
+entities:
+  - name: "EMAIL"
+    enabled: true
+    tier: 1
+    priority: 100
+  - name: "PHONE"
+    enabled: true
+    tier: 1
+    priority: 100
+  - name: "ID"
+    enabled: true
+    tier: 1
+    priority: 100
+  - name: "PERSON"
+    enabled: true
+    tier: 1
+    priority: 90
+  - name: "ADDRESS"
+    enabled: true
+    tier: 1
+    priority: 90
+  - name: "COMPANY"
+    enabled: true
+    tier: 2
+    priority: 80
+  - name: "MONEY"
+    enabled: true
+    tier: 2
+    priority: 70
+  - name: "DATE"
+    enabled: true
+    tier: 2
+    priority: 70
+  - name: "KEYWORD"
+    enabled: true
+    tier: 3
+    priority: 60
+  - name: "PARTIES"
+    enabled: true
+    tier: 0
+    priority: 10
+
+
+performance:
+  # For long documents, use chunked NLP analysis (split → full Presidio+GiNZA per chunk → merge).
+  # Only fall back to regex-only for extremely large files (>= fast_threshold_chars).
+  force_fast: false
+  # Regex-only fallback threshold (5x the previous 80K limit)
+  fast_threshold_chars: 400000
+  # Chunk size for NLP analysis (chars). spaCy tokenizer limit = 49149 bytes.
+  # Japanese ≈ 3 bytes/char → safe max ~15000 chars per chunk.
+  nlp_chunk_size: 15000
+  # Overlap between chunks to avoid cutting entities at boundaries.
+  nlp_chunk_overlap: 300
